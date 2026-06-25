@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            Пожалуйста, исправьте ошибки ниже.
+        </div>
+    {% endif %}
+    <div class="mb-3">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {% if form.title.errors %}
+            <div class="text-danger">{{ form.title.errors }}</div>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.summary.label_tag }}
+        {{ form.summary }}
+        {% if form.summary.errors %}
+            <div class="text-danger">{{ form.summary.errors }}</div>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+        {% if form.content.errors %}
+            <div class="text-danger">{{ form.content.errors }}</div>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'news_app:home' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

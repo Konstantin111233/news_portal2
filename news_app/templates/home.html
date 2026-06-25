@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Все новости</h1>
+
+{% if news_list %}
+    <div class="row">
+        {% for news in news_list %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'news_app:news_detail' news.id %}" class="text-decoration-none">
+                                {{ news.title }}
+                            </a>
+                            {% if user.is_authenticated and news.author == user %}
+                                <span class="badge bg-primary ms-2">Ваша новость</span>
+                            {% endif %}
+                        </h5>
+                        <p class="card-text">{{ news.summary|truncatechars:100 }}</p>
+                        <small class="text-muted">
+                            Автор: {{ news.author.username }} | {{ news.date_created|date:"d.m.Y H:i" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">Новостей пока нет. Будьте первым, кто добавит новость!</div>
+{% endif %}
+{% endblock %}

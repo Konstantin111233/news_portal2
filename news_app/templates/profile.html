@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>Профиль пользователя</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            Пожалуйста, исправьте ошибки.
+                        </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                    </div>
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100">Обновить профиль</button>
+                </form>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'news_app:profile_delete' %}" class="btn btn-danger w-100">Удалить аккаунт</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Мои новости</h4>
+            </div>
+            <div class="card-body">
+                {% for news in user.news_set.all %}
+                    <div class="mb-2">
+                        <a href="{% url 'news_app:news_detail' news.id %}">{{ news.title }}</a>
+                        <small class="text-muted">({{ news.date_created|date:"d.m.Y" }})</small>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">У вас пока нет новостей.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
